@@ -1,0 +1,17 @@
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">🚗</div>
+    <div>
+      <div class="brand-name">Isaac's<br>Driving School</div>
+    </div>
+  </div>
+
+  <div class="nav-section-label">MAIN</div>
+  <nav class="sidebar-nav">
+    <a href="/dashboard/admin" class="<%= active === 'dashboard' ? 'active' : '' %>">🏠 Dashboard</a>
+    <a href="/dashboard/admin/students" class="<%= active === 'students' ? 'active' : '' %>">👥 Students</a>
+    <a href="/dashboard/admin/instructors" class="<%= active === 'instructors' ? 'active' : '' %>">🧑‍🏫 Instructors</a>
+    <a href="/dashboard/admin/lessons" class="<%= active === 'lessons' ? 'active' : '' %>">📅 Lessons</a>
+    <a href="/dashboard/admin/inquiries" class="<%= active === 'inquiries' ? 'active' : '' %>">✉️ Inquiries</a>
+  </nav>
+</aside>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inquiries - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'inquiries' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Inquiries', user: user }) %>
+
+      <section>
+        <h3>All Inquiries</h3>
+        <table>
+          <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Status</th><th>Date</th><th>Action</th>
+          </tr>
+          <% inquiries.forEach(inq => { %>
+            <tr>
+              <td><%= inq.name %></td>
+              <td><%= inq.email %></td>
+              <td><%= inq.phone %></td>
+              <td><%= inq.message %></td>
+              <td><span class="status status-<%= inq.status %>"><%= inq.status %></span></td>
+              <td><%= inq.created_at %></td>
+              <td>
+                <% if (inq.status !== 'converted') { %>
+                  <a href="/dashboard/admin/inquiries/<%= inq.id %>/convert">Convert to Student</a>
+                <% } else { %>
+                  Converted
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (inquiries.length === 0) { %>
+            <tr><td colspan="7">No inquiries yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

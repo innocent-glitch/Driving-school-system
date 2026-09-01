@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Students - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'students' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Students', user: user }) %>
+
+      <div class="quick-actions">
+        <a href="/dashboard/admin/students/new" class="btn btn-red">+ Add Student</a>
+      </div>
+
+      <section>
+        <h3>All Students</h3>
+        <table>
+          <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>License Stage</th>
+          </tr>
+          <% students.forEach(s => { %>
+            <tr>
+              <td><%= s.name %></td>
+              <td><%= s.email %></td>
+              <td><%= s.phone %></td>
+              <td><%= s.license_stage %></td>
+            </tr>
+          <% }) %>
+          <% if (students.length === 0) { %>
+            <tr><td colspan="4">No students yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

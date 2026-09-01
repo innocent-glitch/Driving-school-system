@@ -30,10 +30,20 @@ router.get('/dashboard/admin', requireAdmin, (req, res) => {
       JOIN users i_user ON instructors.user_id = i_user.id
       ORDER BY lessons.date DESC
     `, [], (err2, lessons) => {
-      res.render('dashboard/admin', {
-        user: req.session.user,
-        inquiries: inquiries || [],
-        lessons: lessons || []
+      db.get(`SELECT COUNT(*) as count FROM students`, [], (err3, studentCount) => {
+        db.get(`SELECT COUNT(*) as count FROM instructors`, [], (err4, instructorCount) => {
+          const allLessons = lessons || [];
+          const allInquiries = inquiries || [];
+          res.render('dashboard/admin', {
+            user: req.session.user,
+            inquiries: allInquiries,
+            lessons: allLessons,
+            totalStudents: studentCount.count,
+            totalInstructors: instructorCount.count,
+            scheduledCount: allLessons.filter(l => l.status === 'scheduled').length,
+            newInquiriesCount: allInquiries.filter(i => i.status === 'new').length
+          });
+        });
       });
     });
   });
@@ -78,5 +88,11 @@ router.get('/dashboard/student', requireLogin, (req, res) => {
     });
   });
 });
-
+// Instructor: mark lesson complete
+router.post('/dashboard/instructor/lessons/:id/complete', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'instructor') return res.redirect('/login');
+  db.run(`UPDATE lessons SET status = 'completed' WHERE id = ?`, [req.params.id], () => {
+    res.redirect('/dashboard/instructor');
+  });
+});
 module.exports = router;
