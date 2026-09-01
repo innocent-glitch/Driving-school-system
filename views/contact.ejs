@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book a Lesson - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Isaac's Driving School</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/contact">Book a Lesson</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Book a Lesson</h2>
+
+    <% if (success) { %>
+      <p class="success">Thanks! We received your request and will contact you soon.</p>
+    <% } %>
+
+    <form method="POST" action="/contact">
+      <label>Name</label>
+      <input type="text" name="name" required>
+
+      <label>Email</label>
+      <input type="email" name="email" required>
+
+      <label>Phone</label>
+      <input type="text" name="phone">
+
+      <label>Message</label>
+      <textarea name="message" rows="4"></textarea>
+
+      <button type="submit">Send Request</button>
+    </form>
+  </main>
+</body>
+</html>

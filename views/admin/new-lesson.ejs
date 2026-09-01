@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Schedule Lesson - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Isaac's Driving School</h1>
+    <nav>
+      <a href="/dashboard/admin">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Schedule a Lesson</h2>
+    <% if (error) { %><p class="error"><%= error %></p><% } %>
+
+    <form method="POST" action="/dashboard/admin/lessons/new">
+      <label>Student</label>
+      <select name="student_id" required>
+        <option value="">-- Select Student --</option>
+        <% students.forEach(s => { %>
+          <option value="<%= s.id %>"><%= s.name %></option>
+        <% }) %>
+      </select>
+
+      <label>Instructor</label>
+      <select name="instructor_id" required>
+        <option value="">-- Select Instructor --</option>
+        <% instructors.forEach(i => { %>
+          <option value="<%= i.id %>"><%= i.name %></option>
+        <% }) %>
+      </select>
+
+      <label>Date</label>
+      <input type="date" name="date" required>
+
+      <label>Time</label>
+      <input type="time" name="time" required>
+
+      <button type="submit">Schedule Lesson</button>
+    </form>
+  </main>
+</body>
+</html>

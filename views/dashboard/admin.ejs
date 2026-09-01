@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Isaac's Driving School</h1>
+    <nav>
+      <a href="/dashboard/admin">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="wide">
+    <h2>Welcome, <%= user.name %> (<%= user.role %>)</h2>
+<div style="margin: 20px 0;">
+  <a href="/dashboard/admin/students/new" class="btn">+ Add Student</a>
+  <a href="/dashboard/admin/instructors/new" class="btn">+ Add Instructor</a>
+  <a href="/dashboard/admin/lessons/new" class="btn">+ Schedule Lesson</a>
+</div>
+    <section>
+      <h3>New Inquiries</h3>
+      <table>
+        <tr>
+          <th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Status</th><th>Date</th>
+        </tr>
+        <% inquiries.forEach(inq => { %>
+          <tr>
+            <td><%= inq.name %></td>
+            <td><%= inq.email %></td>
+            <td><%= inq.phone %></td>
+            <td><%= inq.message %></td>
+            <td><%= inq.status %></td>
+            <td><%= inq.created_at %></td>
+          </tr>
+        <% }) %>
+        <% if (inquiries.length === 0) { %>
+          <tr><td colspan="6">No inquiries yet.</td></tr>
+        <% } %>
+      </table>
+    </section>
+
+    <section>
+      <h3>Scheduled Lessons</h3>
+      <table>
+        <tr>
+          <th>Student</th><th>Instructor</th><th>Date</th><th>Time</th><th>Status</th>
+        </tr>
+        <% lessons.forEach(l => { %>
+          <tr>
+            <td><%= l.student_name %></td>
+            <td><%= l.instructor_name %></td>
+            <td><%= l.date %></td>
+            <td><%= l.time %></td>
+            <td><%= l.status %></td>
+          </tr>
+        <% }) %>
+        <% if (lessons.length === 0) { %>
+          <tr><td colspan="5">No lessons scheduled yet.</td></tr>
+        <% } %>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

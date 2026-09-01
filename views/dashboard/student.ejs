@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Isaac's Driving School</h1>
+    <nav>
+      <a href="/dashboard/student">My Lessons</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="wide">
+    <h2>Welcome, <%= user.name %></h2>
+
+    <section>
+      <h3>My Upcoming Lessons</h3>
+      <table>
+        <tr>
+          <th>Instructor</th><th>Date</th><th>Time</th><th>Status</th>
+        </tr>
+        <% lessons.forEach(l => { %>
+          <tr>
+            <td><%= l.instructor_name %></td>
+            <td><%= l.date %></td>
+            <td><%= l.time %></td>
+            <td><%= l.status %></td>
+          </tr>
+        <% }) %>
+        <% if (lessons.length === 0) { %>
+          <tr><td colspan="4">No lessons scheduled yet.</td></tr>
+        <% } %>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

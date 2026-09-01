@@ -1,0 +1,82 @@
+const express = require('express');
+const router = express.Router();
+const db = require('../db/database');
+
+// Middleware: must be logged in
+function requireLogin(req, res, next) {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
+// Middleware: must be admin or receptionist
+function requireAdmin(req, res, next) {
+  if (!req.session.user || !['admin', 'receptionist'].includes(req.session.user.role)) {
+    return res.redirect('/login');
+  }
+  next();
+}
+
+// Admin / Receptionist dashboard
+router.get('/dashboard/admin', requireAdmin, (req, res) => {
+  db.all(`SELECT * FROM inquiries ORDER BY created_at DESC`, [], (err, inquiries) => {
+    db.all(`
+      SELECT lessons.*, s_user.name as student_name, i_user.name as instructor_name
+      FROM lessons
+      JOIN students ON lessons.student_id = students.id
+      JOIN users s_user ON students.user_id = s_user.id
+      JOIN instructors ON lessons.instructor_id = instructors.id
+      JOIN users i_user ON instructors.user_id = i_user.id
+      ORDER BY lessons.date DESC
+    `, [], (err2, lessons) => {
+      res.render('dashboard/admin', {
+        user: req.session.user,
+        inquiries: inquiries || [],
+        lessons: lessons || []
+      });
+    });
+  });
+});
+
+// Instructor dashboard
+router.get('/dashboard/instructor', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'instructor') return res.redirect('/login');
+
+  db.get(`SELECT * FROM instructors WHERE user_id = ?`, [req.session.user.id], (err, instructor) => {
+    if (!instructor) return res.render('dashboard/instructor', { user: req.session.user, lessons: [] });
+
+    db.all(`
+      SELECT lessons.*, s_user.name as student_name
+      FROM lessons
+      JOIN students ON lessons.student_id = students.id
+      JOIN users s_user ON students.user_id = s_user.id
+      WHERE lessons.instructor_id = ?
+      ORDER BY lessons.date ASC
+    `, [instructor.id], (err2, lessons) => {
+      res.render('dashboard/instructor', { user: req.session.user, lessons: lessons || [] });
+    });
+  });
+});
+
+// Student dashboard
+router.get('/dashboard/student', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'student') return res.redirect('/login');
+
+  db.get(`SELECT * FROM students WHERE user_id = ?`, [req.session.user.id], (err, student) => {
+    if (!student) return res.render('dashboard/student', { user: req.session.user, lessons: [] });
+
+    db.all(`
+      SELECT lessons.*, i_user.name as instructor_name
+      FROM lessons
+      JOIN instructors ON lessons.instructor_id = instructors.id
+      JOIN users i_user ON instructors.user_id = i_user.id
+      WHERE lessons.student_id = ?
+      ORDER BY lessons.date ASC
+    `, [student.id], (err2, lessons) => {
+      res.render('dashboard/student', { user: req.session.user, lessons: lessons || [] });
+    });
+  });
+});
+
+module.exports = router;
