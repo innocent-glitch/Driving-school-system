@@ -1,21 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Lessons - Isaac's Driving School</title>
+  <title>Admin Dashboard - Isaac's Driving School</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <div class="app-layout">
-    <%- include('../partials/sidebar', { active: 'lessons' }) %>
+    <%- include('../partials/sidebar', { active: 'dashboard' }) %>
+
     <main class="main-panel">
-      <%- include('../partials/topbar', { pageTitle: 'Lessons', user: user }) %>
+      <%- include('../partials/topbar', { pageTitle: 'Dashboard', user: user }) %>
+
+      <div class="welcome-banner">
+        <div>
+          <h3>🚗 Welcome to Isaac's Driving School</h3>
+          <p>Driving School Management System</p>
+        </div>
+      </div>
+
+      <div class="info-banner">
+        ✅ You are logged in as <strong><%= user.role %></strong>. You have full access to the system.
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card stat-red">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number"><%= totalStudents %></div>
+          <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-icon">🧑‍🏫</div>
+          <div class="stat-number"><%= totalInstructors %></div>
+          <div class="stat-label">Active Instructors</div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon">🚙</div>
+          <div class="stat-number"><%= totalVehicles %></div>
+          <div class="stat-label">Vehicles</div>
+        </div>
+        <div class="stat-card stat-blue">
+          <div class="stat-icon">📅</div>
+          <div class="stat-number"><%= scheduledCount %></div>
+          <div class="stat-label">Scheduled Lessons</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card stat-green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-number"><%= totalPayments %></div>
+          <div class="stat-label">Total Payments Received</div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon">✉️</div>
+          <div class="stat-number"><%= newInquiriesCount %></div>
+          <div class="stat-label">New Inquiries</div>
+        </div>
+      </div>
 
       <div class="quick-actions">
+        <a href="/dashboard/admin/students/new" class="btn btn-red">+ Add Student</a>
+        <a href="/dashboard/admin/instructors/new" class="btn btn-green">+ Add Instructor</a>
         <a href="/dashboard/admin/lessons/new" class="btn btn-orange">+ Schedule Lesson</a>
       </div>
 
       <section>
-        <h3>All Lessons</h3>
+        <h3>New Inquiries</h3>
+        <table>
+          <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Status</th><th>Date</th><th>Action</th>
+          </tr>
+          <% inquiries.forEach(inq => { %>
+            <tr>
+              <td><%= inq.name %></td>
+              <td><%= inq.email %></td>
+              <td><%= inq.phone %></td>
+              <td><%= inq.message %></td>
+              <td><span class="status status-<%= inq.status %>"><%= inq.status %></span></td>
+              <td><%= inq.created_at %></td>
+              <td>
+                <% if (inq.status !== 'converted') { %>
+                  <a href="/dashboard/admin/inquiries/<%= inq.id %>/convert">Convert to Student</a>
+                <% } else { %>
+                  Converted
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (inquiries.length === 0) { %>
+            <tr><td colspan="7">No inquiries yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+
+      <section>
+        <h3>Scheduled Lessons</h3>
         <table>
           <tr>
             <th>Student</th><th>Instructor</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th>
@@ -42,7 +121,7 @@
             </tr>
           <% }) %>
           <% if (lessons.length === 0) { %>
-            <tr><td colspan="6">No lessons yet.</td></tr>
+            <tr><td colspan="6">No lessons scheduled yet.</td></tr>
           <% } %>
         </table>
       </section>

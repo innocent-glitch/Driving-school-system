@@ -32,16 +32,22 @@ router.get('/dashboard/admin', requireAdmin, (req, res) => {
     `, [], (err2, lessons) => {
       db.get(`SELECT COUNT(*) as count FROM students`, [], (err3, studentCount) => {
         db.get(`SELECT COUNT(*) as count FROM instructors`, [], (err4, instructorCount) => {
-          const allLessons = lessons || [];
-          const allInquiries = inquiries || [];
-          res.render('dashboard/admin', {
-            user: req.session.user,
-            inquiries: allInquiries,
-            lessons: allLessons,
-            totalStudents: studentCount.count,
-            totalInstructors: instructorCount.count,
-            scheduledCount: allLessons.filter(l => l.status === 'scheduled').length,
-            newInquiriesCount: allInquiries.filter(i => i.status === 'new').length
+          db.get(`SELECT COUNT(*) as count FROM vehicles`, [], (err5, vehicleCount) => {
+            db.get(`SELECT COALESCE(SUM(amount), 0) as total FROM payments`, [], (err6, paymentTotal) => {
+              const allLessons = lessons || [];
+              const allInquiries = inquiries || [];
+              res.render('dashboard/admin', {
+                user: req.session.user,
+                inquiries: allInquiries,
+                lessons: allLessons,
+                totalStudents: studentCount.count,
+                totalInstructors: instructorCount.count,
+                totalVehicles: vehicleCount.count,
+                totalPayments: paymentTotal.total,
+                scheduledCount: allLessons.filter(l => l.status === 'scheduled').length,
+                newInquiriesCount: allInquiries.filter(i => i.status === 'new').length
+              });
+            });
           });
         });
       });
