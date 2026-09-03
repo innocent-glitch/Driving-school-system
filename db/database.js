@@ -33,17 +33,41 @@ db.serialize(() => {
     FOREIGN KEY(user_id) REFERENCES users(id)
   )`);
 
+  // Vehicles — the school's fleet
+  db.run(`CREATE TABLE IF NOT EXISTS vehicles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    make TEXT NOT NULL,
+    model TEXT NOT NULL,
+    plate_number TEXT UNIQUE NOT NULL,
+    transmission TEXT DEFAULT 'Manual' CHECK(transmission IN ('Manual','Automatic')),
+    status TEXT DEFAULT 'available' CHECK(status IN ('available','in-use','maintenance')),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
   // Lessons — scheduled sessions between a student and instructor
   db.run(`CREATE TABLE IF NOT EXISTS lessons (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id INTEGER NOT NULL,
     instructor_id INTEGER NOT NULL,
+    vehicle_id INTEGER,
     date TEXT NOT NULL,
     time TEXT NOT NULL,
     status TEXT DEFAULT 'scheduled' CHECK(status IN ('scheduled','completed','cancelled')),
     notes TEXT,
     FOREIGN KEY(student_id) REFERENCES students(id),
-    FOREIGN KEY(instructor_id) REFERENCES instructors(id)
+    FOREIGN KEY(instructor_id) REFERENCES instructors(id),
+    FOREIGN KEY(vehicle_id) REFERENCES vehicles(id)
+  )`);
+
+  // Payments — tracks money received from students
+  db.run(`CREATE TABLE IF NOT EXISTS payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER NOT NULL,
+    amount REAL NOT NULL,
+    method TEXT DEFAULT 'cash' CHECK(method IN ('cash','mobile money','card','bank transfer')),
+    notes TEXT,
+    paid_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(student_id) REFERENCES students(id)
   )`);
 
   // Public booking inquiries — from the public website contact/booking form

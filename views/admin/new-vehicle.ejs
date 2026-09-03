@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Vehicle - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'vehicles' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Add Vehicle', user: user }) %>
+
+      <section style="max-width: 450px;">
+        <% if (error) { %><p class="error"><%= error %></p><% } %>
+        <form method="POST" action="/dashboard/admin/vehicles/new">
+          <label>Make</label>
+          <input type="text" name="make" placeholder="e.g. Toyota" required>
+
+          <label>Model</label>
+          <input type="text" name="model" placeholder="e.g. Corolla" required>
+
+          <label>Plate Number</label>
+          <input type="text" name="plate_number" required>
+
+          <label>Transmission</label>
+          <select name="transmission">
+            <option value="Manual">Manual</option>
+            <option value="Automatic">Automatic</option>
+          </select>
+
+          <button type="submit" class="btn">Add Vehicle</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

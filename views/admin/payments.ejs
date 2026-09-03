@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payments - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'payments' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Payments', user: user }) %>
+
+      <div class="quick-actions">
+        <a href="/dashboard/admin/payments/new" class="btn btn-green">+ Record Payment</a>
+      </div>
+
+      <div class="stat-grid" style="max-width: 300px;">
+        <div class="stat-card stat-green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-number"><%= total %></div>
+          <div class="stat-label">Total Received</div>
+        </div>
+      </div>
+
+      <section>
+        <h3>All Payments</h3>
+        <table>
+          <tr>
+            <th>Student</th><th>Amount</th><th>Method</th><th>Notes</th><th>Date</th>
+          </tr>
+          <% payments.forEach(p => { %>
+            <tr>
+              <td><%= p.student_name %></td>
+              <td><%= p.amount %></td>
+              <td><%= p.method %></td>
+              <td><%= p.notes %></td>
+              <td><%= p.paid_at %></td>
+            </tr>
+          <% }) %>
+          <% if (payments.length === 0) { %>
+            <tr><td colspan="5">No payments recorded yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

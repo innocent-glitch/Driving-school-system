@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Record Payment - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'payments' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Record Payment', user: user }) %>
+
+      <section style="max-width: 450px;">
+        <% if (error) { %><p class="error"><%= error %></p><% } %>
+        <form method="POST" action="/dashboard/admin/payments/new">
+          <label>Student</label>
+          <select name="student_id" required>
+            <option value="">-- Select Student --</option>
+            <% students.forEach(s => { %>
+              <option value="<%= s.id %>"><%= s.name %></option>
+            <% }) %>
+          </select>
+
+          <label>Amount</label>
+          <input type="number" name="amount" step="0.01" required>
+
+          <label>Method</label>
+          <select name="method">
+            <option value="cash">Cash</option>
+            <option value="mobile money">Mobile Money</option>
+            <option value="card">Card</option>
+            <option value="bank transfer">Bank Transfer</option>
+          </select>
+
+          <label>Notes</label>
+          <input type="text" name="notes" placeholder="optional">
+
+          <button type="submit" class="btn">Record Payment</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

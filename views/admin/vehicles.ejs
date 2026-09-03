@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vehicles - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'vehicles' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Vehicles', user: user }) %>
+
+      <div class="quick-actions">
+        <a href="/dashboard/admin/vehicles/new" class="btn btn-orange">+ Add Vehicle</a>
+      </div>
+
+      <section>
+        <h3>Fleet</h3>
+        <table>
+          <tr>
+            <th>Make</th><th>Model</th><th>Plate Number</th><th>Transmission</th><th>Status</th><th>Action</th>
+          </tr>
+          <% vehicles.forEach(v => { %>
+            <tr>
+              <td><%= v.make %></td>
+              <td><%= v.model %></td>
+              <td><%= v.plate_number %></td>
+              <td><%= v.transmission %></td>
+              <td><%= v.status %></td>
+              <td>
+                <form method="POST" action="/dashboard/admin/vehicles/<%= v.id %>/status" style="display:inline;">
+                  <select name="status" onchange="this.form.submit()">
+                    <option value="available" <%= v.status === 'available' ? 'selected' : '' %>>Available</option>
+                    <option value="in-use" <%= v.status === 'in-use' ? 'selected' : '' %>>In Use</option>
+                    <option value="maintenance" <%= v.status === 'maintenance' ? 'selected' : '' %>>Maintenance</option>
+                  </select>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+          <% if (vehicles.length === 0) { %>
+            <tr><td colspan="6">No vehicles yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

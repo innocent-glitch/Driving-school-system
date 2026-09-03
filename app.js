@@ -34,6 +34,10 @@ const dashboardRoutes = require('./routes/dashboard');
 app.use('/', dashboardRoutes);
 const adminRoutes = require('./routes/admin');
 app.use('/', adminRoutes);
+const vehicleRoutes = require('./routes/vehicles');
+app.use('/', vehicleRoutes);
+const paymentRoutes = require('./routes/payments');
+app.use('/', paymentRoutes);
 app.listen(PORT, () => {
   console.log(`Driving school server running at http://localhost:${PORT}`);
 });
