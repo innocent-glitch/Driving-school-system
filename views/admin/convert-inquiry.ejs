@@ -5,33 +5,30 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Isaac's Driving School</h1>
-    <nav>
-      <a href="/dashboard/admin">Dashboard</a>
-      <a href="/logout">Logout</a>
-    </nav>
-  </header>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'inquiries' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Convert Inquiry', user: user }) %>
 
-  <main>
-    <h2>Convert Inquiry to Student</h2>
-    <% if (error) { %><p class="error"><%= error %></p><% } %>
+      <section style="max-width: 450px;">
+        <% if (error) { %><p class="error"><%= error %></p><% } %>
+        <form method="POST" action="/dashboard/admin/inquiries/<%= inquiry.id %>/convert">
+          <label>Full Name</label>
+          <input type="text" name="name" value="<%= inquiry.name %>" required>
 
-    <form method="POST" action="/dashboard/admin/inquiries/<%= inquiry.id %>/convert">
-      <label>Full Name</label>
-      <input type="text" name="name" value="<%= inquiry.name %>" required>
+          <label>Email</label>
+          <input type="email" name="email" value="<%= inquiry.email %>" required>
 
-      <label>Email</label>
-      <input type="email" name="email" value="<%= inquiry.email %>" required>
+          <label>Phone</label>
+          <input type="text" name="phone" value="<%= inquiry.phone %>">
 
-      <label>Phone</label>
-      <input type="text" name="phone" value="<%= inquiry.phone %>">
+          <label>Set a Password for this Student</label>
+          <input type="password" name="password" required>
 
-      <label>Set a Password for this Student</label>
-      <input type="password" name="password" required>
-
-      <button type="submit">Create Student Account</button>
-    </form>
-  </main>
+          <button type="submit" class="btn">Create Student Account</button>
+        </form>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

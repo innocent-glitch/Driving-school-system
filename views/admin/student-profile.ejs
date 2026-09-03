@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= student.name %> - Isaac's Driving School</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'students' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: student.name, user: user }) %>
+
+      <section>
+        <h3>Student Info</h3>
+        <p><strong>Email:</strong> <%= student.email %></p>
+        <p><strong>Phone:</strong> <%= student.phone %></p>
+        <p><strong>License Stage:</strong> <%= student.license_stage %></p>
+      </section>
+
+      <section>
+        <h3>Lesson History</h3>
+        <table>
+          <tr>
+            <th>Instructor</th><th>Date</th><th>Time</th><th>Status</th>
+          </tr>
+          <% lessons.forEach(l => { %>
+            <tr>
+              <td><%= l.instructor_name %></td>
+              <td><%= l.date %></td>
+              <td><%= l.time %></td>
+              <td><span class="status status-<%= l.status %>"><%= l.status %></span></td>
+            </tr>
+          <% }) %>
+          <% if (lessons.length === 0) { %>
+            <tr><td colspan="4">No lessons yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+
+      <section>
+        <h3>Payment History</h3>
+        <table>
+          <tr>
+            <th>Amount</th><th>Method</th><th>Notes</th><th>Date</th>
+          </tr>
+          <% payments.forEach(p => { %>
+            <tr>
+              <td><%= p.amount %></td>
+              <td><%= p.method %></td>
+              <td><%= p.notes %></td>
+              <td><%= p.paid_at %></td>
+            </tr>
+          <% }) %>
+          <% if (payments.length === 0) { %>
+            <tr><td colspan="4">No payments yet.</td></tr>
+          <% } %>
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

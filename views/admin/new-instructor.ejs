@@ -5,36 +5,33 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Isaac's Driving School</h1>
-    <nav>
-      <a href="/dashboard/admin">Dashboard</a>
-      <a href="/logout">Logout</a>
-    </nav>
-  </header>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'instructors' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Add Instructor', user: user }) %>
 
-  <main>
-    <h2>Add New Instructor</h2>
-    <% if (error) { %><p class="error"><%= error %></p><% } %>
+      <section style="max-width: 450px;">
+        <% if (error) { %><p class="error"><%= error %></p><% } %>
+        <form method="POST" action="/dashboard/admin/instructors/new">
+          <label>Full Name</label>
+          <input type="text" name="name" required>
 
-    <form method="POST" action="/dashboard/admin/instructors/new">
-      <label>Full Name</label>
-      <input type="text" name="name" required>
+          <label>Email</label>
+          <input type="email" name="email" required>
 
-      <label>Email</label>
-      <input type="email" name="email" required>
+          <label>Phone</label>
+          <input type="text" name="phone">
 
-      <label>Phone</label>
-      <input type="text" name="phone">
+          <label>Specialty</label>
+          <input type="text" name="specialty" placeholder="e.g. Manual, Automatic">
 
-      <label>Specialty</label>
-      <input type="text" name="specialty" placeholder="e.g. Manual, Automatic">
+          <label>Password</label>
+          <input type="password" name="password" required>
 
-      <label>Password</label>
-      <input type="password" name="password" required>
-
-      <button type="submit">Add Instructor</button>
-    </form>
-  </main>
+          <button type="submit" class="btn">Add Instructor</button>
+        </form>
+      </section>
+    </main>
+  </div>
 </body>
 </html>

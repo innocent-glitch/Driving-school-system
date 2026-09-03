@@ -123,6 +123,36 @@ router.post('/dashboard/admin/inquiries/:id/convert', requireAdmin, (req, res) =
     }
   );
 });
+// ---- STUDENT PROFILE ----
+router.get('/dashboard/admin/students/:id', requireAdmin, (req, res) => {
+  db.get(`
+    SELECT students.*, users.name, users.email, users.phone
+    FROM students JOIN users ON students.user_id = users.id
+    WHERE students.id = ?
+  `, [req.params.id], (err, student) => {
+    if (!student) return res.redirect('/dashboard/admin/students');
+
+    db.all(`
+      SELECT lessons.*, i_user.name as instructor_name
+      FROM lessons
+      JOIN instructors ON lessons.instructor_id = instructors.id
+      JOIN users i_user ON instructors.user_id = i_user.id
+      WHERE lessons.student_id = ?
+      ORDER BY lessons.date DESC
+    `, [student.id], (err2, lessons) => {
+      db.all(`
+        SELECT * FROM payments WHERE student_id = ? ORDER BY paid_at DESC
+      `, [student.id], (err3, payments) => {
+        res.render('admin/student-profile', {
+          student,
+          lessons: lessons || [],
+          payments: payments || [],
+          user: req.session.user
+        });
+      });
+    });
+  });
+});
 
 // ---- LIST STUDENTS ----
 router.get('/dashboard/admin/students', requireAdmin, (req, res) => {
