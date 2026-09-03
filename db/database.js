@@ -25,14 +25,15 @@ db.serialize(() => {
   )`);
 
   // Students — extra profile info linked to a user account
-  db.run(`CREATE TABLE IF NOT EXISTS students (
+ db.run(`CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    license_stage TEXT DEFAULT 'Not Started',
+    license_stage TEXT DEFAULT 'Not Started' CHECK(license_stage IN ('Not Started','Learner Permit','Test Scheduled','Licensed')),
+    license_number TEXT,
+    permit_number TEXT,
     notes TEXT,
     FOREIGN KEY(user_id) REFERENCES users(id)
   )`);
-
   // Vehicles — the school's fleet
   db.run(`CREATE TABLE IF NOT EXISTS vehicles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

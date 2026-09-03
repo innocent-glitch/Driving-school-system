@@ -25,7 +25,7 @@
               <td><a href="/dashboard/admin/students/<%= s.id %>"><%= s.name %></a></td>
               <td><%= s.email %></td>
               <td><%= s.phone %></td>
-              <td><%= s.license_stage %></td>
+              <td><span class="status status-<%= s.license_stage === 'Licensed' ? 'completed' : (s.license_stage === 'Not Started' ? 'cancelled' : 'scheduled') %>"><%= s.license_stage %></span></td>
             </tr>
           <% }) %>
           <% if (students.length === 0) { %>

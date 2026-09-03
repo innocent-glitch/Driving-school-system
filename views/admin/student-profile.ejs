@@ -11,11 +11,31 @@
       <%- include('../partials/topbar', { pageTitle: student.name, user: user }) %>
 
       <section>
-        <h3>Student Info</h3>
-        <p><strong>Email:</strong> <%= student.email %></p>
-        <p><strong>Phone:</strong> <%= student.phone %></p>
-        <p><strong>License Stage:</strong> <%= student.license_stage %></p>
-      </section>
+  <h3>Student Info</h3>
+  <p><strong>Email:</strong> <%= student.email %></p>
+  <p><strong>Phone:</strong> <%= student.phone %></p>
+</section>
+
+<section style="max-width: 450px;">
+  <h3>License Progress</h3>
+  <form method="POST" action="/dashboard/admin/students/<%= student.id %>/license">
+    <label>License Stage</label>
+    <select name="license_stage">
+      <option value="Not Started" <%= student.license_stage === 'Not Started' ? 'selected' : '' %>>Not Started</option>
+      <option value="Learner Permit" <%= student.license_stage === 'Learner Permit' ? 'selected' : '' %>>Learner Permit</option>
+      <option value="Test Scheduled" <%= student.license_stage === 'Test Scheduled' ? 'selected' : '' %>>Test Scheduled</option>
+      <option value="Licensed" <%= student.license_stage === 'Licensed' ? 'selected' : '' %>>Licensed</option>
+    </select>
+
+    <label>Permit Number</label>
+    <input type="text" name="permit_number" value="<%= student.permit_number || '' %>">
+
+    <label>License Number</label>
+    <input type="text" name="license_number" value="<%= student.license_number || '' %>">
+
+    <button type="submit" class="btn">Update License Info</button>
+  </form>
+</section>
 
       <section>
         <h3>Lesson History</h3>

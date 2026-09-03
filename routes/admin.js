@@ -123,6 +123,17 @@ router.post('/dashboard/admin/inquiries/:id/convert', requireAdmin, (req, res) =
     }
   );
 });
+// ---- EDIT STUDENT LICENSE INFO ----
+router.post('/dashboard/admin/students/:id/license', requireAdmin, (req, res) => {
+  const { license_stage, permit_number, license_number } = req.body;
+  db.run(
+    `UPDATE students SET license_stage = ?, permit_number = ?, license_number = ? WHERE id = ?`,
+    [license_stage, permit_number, license_number, req.params.id],
+    () => {
+      res.redirect('/dashboard/admin/students/' + req.params.id);
+    }
+  );
+});
 // ---- STUDENT PROFILE ----
 router.get('/dashboard/admin/students/:id', requireAdmin, (req, res) => {
   db.get(`
