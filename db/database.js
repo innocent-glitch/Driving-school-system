@@ -1,9 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const bcrypt = require('bcryptjs');
-
 const db = new sqlite3.Database(path.join(__dirname, 'school.db'));
-
 db.serialize(() => {
   // Users table — handles login for admin, receptionist, instructor, student
   db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -15,7 +13,6 @@ db.serialize(() => {
     phone TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
-
   // Instructors — extra profile info linked to a user account
   db.run(`CREATE TABLE IF NOT EXISTS instructors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -23,7 +20,6 @@ db.serialize(() => {
     specialty TEXT,
     FOREIGN KEY(user_id) REFERENCES users(id)
   )`);
-
   // Students — extra profile info linked to a user account
  db.run(`CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -44,7 +40,6 @@ db.serialize(() => {
     status TEXT DEFAULT 'available' CHECK(status IN ('available','in-use','maintenance')),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
-
   // Lessons — scheduled sessions between a student and instructor
   db.run(`CREATE TABLE IF NOT EXISTS lessons (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,7 +54,6 @@ db.serialize(() => {
     FOREIGN KEY(instructor_id) REFERENCES instructors(id),
     FOREIGN KEY(vehicle_id) REFERENCES vehicles(id)
   )`);
-
   // Payments — tracks money received from students
   db.run(`CREATE TABLE IF NOT EXISTS payments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,7 +64,17 @@ db.serialize(() => {
     paid_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(student_id) REFERENCES students(id)
   )`);
-
+  // Driving tests — booked test appointments and their results
+  db.run(`CREATE TABLE IF NOT EXISTS tests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER NOT NULL,
+    test_date TEXT NOT NULL,
+    location TEXT,
+    result TEXT DEFAULT 'pending' CHECK(result IN ('pending','passed','failed')),
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(student_id) REFERENCES students(id)
+  )`);
   // Public booking inquiries — from the public website contact/booking form
   db.run(`CREATE TABLE IF NOT EXISTS inquiries (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,7 +85,6 @@ db.serialize(() => {
     status TEXT DEFAULT 'new' CHECK(status IN ('new','contacted','converted')),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
-
   // Create a default admin account if none exists yet
   db.get(`SELECT * FROM users WHERE role = 'admin' LIMIT 1`, (err, row) => {
     if (!row) {
@@ -94,5 +97,4 @@ db.serialize(() => {
     }
   });
 });
-
 module.exports = db;

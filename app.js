@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/database');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,6 +38,8 @@ const vehicleRoutes = require('./routes/vehicles');
 app.use('/', vehicleRoutes);
 const paymentRoutes = require('./routes/payments');
 app.use('/', paymentRoutes);
+const testRoutes = require('./routes/tests');
+app.use('/', testRoutes);
 app.listen(PORT, () => {
   console.log(`Driving school server running at http://localhost:${PORT}`);
 });

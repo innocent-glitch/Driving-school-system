@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Students - Isaac's Driving School</title>
+  <title>Students - Excel Institute</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
         <h3>All Students</h3>
         <table>
           <tr>
-            <th>Name</th><th>Email</th><th>Phone</th><th>License Stage</th>
+            <th>Name</th><th>Email</th><th>Phone</th><th>License Stage</th><th>Action</th>
           </tr>
           <% students.forEach(s => { %>
             <tr>
@@ -26,10 +26,15 @@
               <td><%= s.email %></td>
               <td><%= s.phone %></td>
               <td><span class="status status-<%= s.license_stage === 'Licensed' ? 'completed' : (s.license_stage === 'Not Started' ? 'cancelled' : 'scheduled') %>"><%= s.license_stage %></span></td>
+              <td>
+                <form method="POST" action="/dashboard/admin/students/<%= s.id %>/delete" onsubmit="return confirm('Delete this student and all their records?');" style="display:inline;">
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
             </tr>
           <% }) %>
           <% if (students.length === 0) { %>
-            <tr><td colspan="4">No students yet.</td></tr>
+            <tr><td colspan="5">No students yet.</td></tr>
           <% } %>
         </table>
       </section>

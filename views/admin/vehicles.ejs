@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Vehicles - Isaac's Driving School</title>
+  <title>Vehicles - Excel Institute</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
               <td><%= v.model %></td>
               <td><%= v.plate_number %></td>
               <td><%= v.transmission %></td>
-              <td><%= v.status %></td>
+              <td><span class="status status-<%= v.status === 'available' ? 'completed' : (v.status === 'in-use' ? 'scheduled' : 'cancelled') %>"><%= v.status %></span></td>
               <td>
                 <form method="POST" action="/dashboard/admin/vehicles/<%= v.id %>/status" style="display:inline;">
                   <select name="status" onchange="this.form.submit()">
@@ -34,6 +34,9 @@
                     <option value="in-use" <%= v.status === 'in-use' ? 'selected' : '' %>>In Use</option>
                     <option value="maintenance" <%= v.status === 'maintenance' ? 'selected' : '' %>>Maintenance</option>
                   </select>
+                </form>
+                <form method="POST" action="/dashboard/admin/vehicles/<%= v.id %>/delete" onsubmit="return confirm('Delete this vehicle?');" style="display:inline;">
+                  <button type="submit">Delete</button>
                 </form>
               </td>
             </tr>

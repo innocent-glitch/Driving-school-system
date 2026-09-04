@@ -36,10 +36,13 @@ router.get('/dashboard/admin', requireAdmin, (req, res) => {
             db.get(`SELECT COALESCE(SUM(amount), 0) as total FROM payments`, [], (err6, paymentTotal) => {
               const allLessons = lessons || [];
               const allInquiries = inquiries || [];
+              const today = new Date().toISOString().split('T')[0];
+              const todayLessons = allLessons.filter(l => l.date === today);
               res.render('dashboard/admin', {
                 user: req.session.user,
                 inquiries: allInquiries,
                 lessons: allLessons,
+                todayLessons: todayLessons,
                 totalStudents: studentCount.count,
                 totalInstructors: instructorCount.count,
                 totalVehicles: vehicleCount.count,

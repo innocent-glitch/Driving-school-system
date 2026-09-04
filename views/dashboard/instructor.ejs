@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Instructors - Isaac's Driving School</title>
+  <title>Instructor Dashboard - Excel Institute</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div class="app-layout">
-    <%- include('../partials/sidebar', { active: 'instructors' }) %>
-    <main class="main-panel">
-      <%- include('../partials/topbar', { pageTitle: 'Instructors', user: user }) %>
+  <header>
+    <h1>Excel Institute</h1>
+    <nav>
+      <a href="/dashboard/instructor">My Schedule</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
 
-      <div class="quick-actions">
-        <a href="/dashboard/admin/instructors/new" class="btn btn-green">+ Add Instructor</a>
-      </div>
+  <main class="wide">
+    <h2>Welcome, <%= user.name %></h2>
 
-      <section>
-        <h3>All Instructors</h3>
-        <table>
+    <section>
+      <h3>My Lessons</h3>
+      <table>
+        <tr>
+          <th>Student</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th>
+        </tr>
+        <% lessons.forEach(l => { %>
           <tr>
-            <th>Name</th><th>Email</th><th>Phone</th><th>Specialty</th>
+            <td><%= l.student_name %></td>
+            <td><%= l.date %></td>
+            <td><%= l.time %></td>
+            <td><%= l.status %></td>
+            <td>
+              <% if (l.status === 'scheduled') { %>
+                <form method="POST" action="/dashboard/instructor/lessons/<%= l.id %>/complete">
+                  <button type="submit">Mark Complete</button>
+                </form>
+              <% } %>
+            </td>
           </tr>
-          <% instructors.forEach(i => { %>
-            <tr>
-              <td><%= i.name %></td>
-              <td><%= i.email %></td>
-              <td><%= i.phone %></td>
-              <td><%= i.specialty %></td>
-            </tr>
-          <% }) %>
-          <% if (instructors.length === 0) { %>
-            <tr><td colspan="4">No instructors yet.</td></tr>
-          <% } %>
-        </table>
-      </section>
-    </main>
-  </div>
+        <% }) %>
+        <% if (lessons.length === 0) { %>
+          <tr><td colspan="5">No lessons scheduled yet.</td></tr>
+        <% } %>
+      </table>
+    </section>
+  </main>
 </body>
 </html>

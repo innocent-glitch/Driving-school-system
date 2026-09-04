@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard - Isaac's Driving School</title>
+  <title>Admin Dashboard - Excel Institute</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
 
       <div class="welcome-banner">
         <div>
-          <h3>🚗 Welcome to Isaac's Driving School</h3>
+          <h3>🚗 Welcome to Excel Institute</h3>
           <p>Driving School Management System</p>
         </div>
       </div>
@@ -57,7 +57,25 @@
           <div class="stat-label">New Inquiries</div>
         </div>
       </div>
-
+<section>
+  <h3>Today's Lessons</h3>
+  <table>
+    <tr>
+      <th>Student</th><th>Instructor</th><th>Time</th><th>Status</th>
+    </tr>
+    <% todayLessons.forEach(l => { %>
+      <tr>
+        <td><%= l.student_name %></td>
+        <td><%= l.instructor_name %></td>
+        <td><%= l.time %></td>
+        <td><span class="status status-<%= l.status %>"><%= l.status %></span></td>
+      </tr>
+    <% }) %>
+    <% if (todayLessons.length === 0) { %>
+      <tr><td colspan="4">No lessons scheduled for today.</td></tr>
+    <% } %>
+  </table>
+</section>
       <div class="quick-actions">
         <a href="/dashboard/admin/students/new" class="btn btn-red">+ Add Student</a>
         <a href="/dashboard/admin/instructors/new" class="btn btn-green">+ Add Instructor</a>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Inquiries - Isaac's Driving School</title>
+  <title>Inquiries - Excel Institute</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -24,13 +24,16 @@
               <td><%= inq.message %></td>
               <td><span class="status status-<%= inq.status %>"><%= inq.status %></span></td>
               <td><%= inq.created_at %></td>
-              <td>
-                <% if (inq.status !== 'converted') { %>
-                  <a href="/dashboard/admin/inquiries/<%= inq.id %>/convert">Convert to Student</a>
-                <% } else { %>
-                  Converted
-                <% } %>
-              </td>
+             <td>
+  <% if (inq.status !== 'converted') { %>
+    <a href="/dashboard/admin/inquiries/<%= inq.id %>/convert">Convert to Student</a>
+  <% } else { %>
+    Converted
+  <% } %>
+  <form method="POST" action="/dashboard/admin/inquiries/<%= inq.id %>/delete" onsubmit="return confirm('Delete this inquiry?');" style="display:inline; margin-left: 8px;">
+    <button type="submit">Delete</button>
+  </form>
+</td>
             </tr>
           <% }) %>
           <% if (inquiries.length === 0) { %>

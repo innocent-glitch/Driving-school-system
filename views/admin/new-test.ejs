@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Test - Excel Institute</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <%- include('../partials/sidebar', { active: 'students' }) %>
+    <main class="main-panel">
+      <%- include('../partials/topbar', { pageTitle: 'Book Driving Test', user: user }) %>
+
+      <section style="max-width: 450px;">
+        <p><strong>Student:</strong> <%= student.name %></p>
+        <% if (error) { %><p class="error"><%= error %></p><% } %>
+
+        <form method="POST" action="/dashboard/admin/students/<%= student.id %>/tests/new">
+          <label>Test Date</label>
+          <input type="date" name="test_date" required>
+
+          <label>Location</label>
+          <input type="text" name="location" placeholder="e.g. Central Test Center">
+
+          <label>Notes</label>
+          <input type="text" name="notes" placeholder="optional">
+
+          <button type="submit" class="btn">Book Test</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
